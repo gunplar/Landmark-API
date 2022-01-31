@@ -1,0 +1,16 @@
+apply plugin: 'java'
+
+sourceCompatibility = 17
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('software.amazon.awssdk:bom:2.15.0')
+    implementation 'software.amazon.awssdk:dynamodb'
+    implementation 'software.amazon.awssdk:iam'
+    implementation 'software.amazon.awssdk:kinesis'
+    implementation 'software.amazon.awssdk:s3'
+    testImplementation group: 'junit', name: 'junit', version: '4.11'
+}
