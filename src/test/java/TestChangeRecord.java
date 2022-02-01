@@ -42,19 +42,21 @@ public class TestChangeRecord {
         .type(existingResourceRecordSet.type())
         .build();
 
+    System.out.println(newResourceRecordSet.resourceRecords());
+/*
     ChangeInfo changeInfo = route53.changeResourceRecordSets(ChangeResourceRecordSetsRequest.builder()
         .hostedZoneId(properties.getProperty("ZoneId"))
         .changeBatch(ChangeBatch.builder().comment("comment")
-            .changes(Change.builder().action(
+            .changes(/*Change.builder().action(
                         ChangeAction.DELETE)
                     .resourceRecordSet(
-                        existingResourceRecordSet).build(),
+                        existingResourceRecordSet).build(),   //
                 Change.builder().action(
                         ChangeAction.CREATE)
                     .resourceRecordSet(
                         newResourceRecordSet).build()).build()
         ).build()).changeInfo();
-    assertValidChangeInfo(changeInfo);
+    assertValidChangeInfo(changeInfo);*/
   }
 
   /**
