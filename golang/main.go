@@ -11,4 +11,5 @@ func check(e error) {
 
 func main() {
     StoreNewPassword()
+    Login()
 }
