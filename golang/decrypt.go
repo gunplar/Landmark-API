@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-func main() {
+func decrypt() {
 	// Load your secret key from a safe place and reuse it across multiple
 	// Seal/Open calls. (Obviously don't use this example key for anything
 	// real.) If you want to convert a passphrase to a key, use a suitable
