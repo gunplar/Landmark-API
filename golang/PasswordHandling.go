@@ -3,9 +3,12 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"os"
 	"path/filepath"
 
@@ -30,7 +33,10 @@ func StoreNewPassword() {
 		var f *os.File
 		f, err = os.OpenFile(passDir, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
 		check(err)
-		defer f.Close()
+		defer func(f *os.File) {
+			err := f.Close()
+			check(err)
+		}(f)
 		hash := sha256.Sum256(secondInput)
 		fmt.Printf("%x", hash)
 		fmt.Println()
@@ -41,7 +47,7 @@ func StoreNewPassword() {
 	fmt.Println("The passwords did not match or was nil.")
 }
 
-func Login() {
+func Login() *route53.Client {
 	password := PasswordInput("Login password:")
 	hash := sha256.Sum256(password)
 	passwordString := hex.EncodeToString(hash[:])
@@ -51,15 +57,23 @@ func Login() {
 	var f *os.File
 	f, err = os.Open(passDir)
 	check(err)
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		check(err)
+	}(f)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		if passwordString == scanner.Text() {
 			fmt.Println("Login success.")
-			return
+			cfg, err := config.LoadDefaultConfig(context.Background(),
+				config.WithRegion("aws-global"),
+			)
+			check(err)
+			return route53.NewFromConfig(cfg)
 		}
 	}
 	err = scanner.Err()
 	check(err)
 	fmt.Println("Login fail.")
+	return nil
 }
