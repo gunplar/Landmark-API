@@ -47,7 +47,7 @@ func StoreNewPassword() {
 	fmt.Println("The passwords did not match or was nil.")
 }
 
-func Login() *route53.Client {
+func Login() (*route53.Client, string) {
 	password := PasswordInput("Login password:")
 	hash := sha256.Sum256(password)
 	passwordString := hex.EncodeToString(hash[:])
@@ -69,11 +69,11 @@ func Login() *route53.Client {
 				config.WithRegion("aws-global"),
 			)
 			check(err)
-			return route53.NewFromConfig(cfg)
+			return route53.NewFromConfig(cfg), passwordString
 		}
 	}
 	err = scanner.Err()
 	check(err)
 	fmt.Println("Login fail.")
-	return nil
+	return nil, ""
 }

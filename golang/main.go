@@ -1,9 +1,5 @@
 package main
 
-import (
-	"github.com/aws/aws-sdk-go-v2/service/route53/types"
-)
-
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -12,6 +8,10 @@ func check(e error) {
 
 func main() {
 	//StoreNewPassword()
-	//Login()
-	ChangeRRSet(Login(), types.ChangeActionDelete, "phucmai1", "test")
+	/*awsClient, hash := Login()
+	if awsClient == nil {
+		return
+	}
+	ChangeRRSet(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")*/
+	decrypt()
 }

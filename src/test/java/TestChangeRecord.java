@@ -12,6 +12,8 @@ import software.amazon.awssdk.services.route53.model.ChangeBatch;
 import software.amazon.awssdk.services.route53.model.ChangeInfo;
 import software.amazon.awssdk.services.route53.model.ChangeResourceRecordSetsRequest;
 import software.amazon.awssdk.services.route53.model.ListResourceRecordSetsRequest;
+import software.amazon.awssdk.services.route53.model.RRType;
+import software.amazon.awssdk.services.route53.model.ResourceRecord;
 import software.amazon.awssdk.services.route53.model.ResourceRecordSet;
 
 public class TestChangeRecord {
@@ -25,38 +27,40 @@ public class TestChangeRecord {
     } catch (Exception e) {
     }
 
-    Route53Client route53 = Route53Client.builder()
+    final Route53Client route53 = Route53Client.builder()
         .region(Region.AWS_GLOBAL)
         .build();
 
-    List<ResourceRecordSet> resourceRecordSets = route53.listResourceRecordSets(
+    final List<ResourceRecordSet> resourceRecordSets = route53.listResourceRecordSets(
         ListResourceRecordSetsRequest.builder().hostedZoneId(properties.getProperty("ZoneId")).build()).resourceRecordSets();
     assertTrue(resourceRecordSets.size() > 0);
     ResourceRecordSet existingResourceRecordSet = resourceRecordSets.get(0);
 
+    final ResourceRecord tobeadded = ResourceRecord.builder().value("\"LOC 123\"").build();
+
     // Change Resource Record Sets
-    ResourceRecordSet newResourceRecordSet = ResourceRecordSet.builder()
-        .name(properties.getProperty("ZoneName"))
-        .resourceRecords(existingResourceRecordSet.resourceRecords())
+    final ResourceRecordSet newResourceRecordSet = ResourceRecordSet.builder()
+        .name("phucmai1."+properties.getProperty("ZoneName"))
+        .resourceRecords(tobeadded)   //existingResourceRecordSet.resourceRecords())
         .ttl(existingResourceRecordSet.ttl() + 100)
-        .type(existingResourceRecordSet.type())
+        .type(RRType.TXT)
         .build();
 
     System.out.println(newResourceRecordSet.resourceRecords());
-/*
+
     ChangeInfo changeInfo = route53.changeResourceRecordSets(ChangeResourceRecordSetsRequest.builder()
         .hostedZoneId(properties.getProperty("ZoneId"))
         .changeBatch(ChangeBatch.builder().comment("comment")
             .changes(/*Change.builder().action(
                         ChangeAction.DELETE)
                     .resourceRecordSet(
-                        existingResourceRecordSet).build(),   //
+                        existingResourceRecordSet).build(),   /*/
                 Change.builder().action(
                         ChangeAction.CREATE)
                     .resourceRecordSet(
                         newResourceRecordSet).build()).build()
         ).build()).changeInfo();
-    assertValidChangeInfo(changeInfo);*/
+    assertValidChangeInfo(changeInfo);
   }
 
   /**

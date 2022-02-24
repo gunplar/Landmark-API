@@ -13,9 +13,9 @@ func decrypt() {
 	// real.) If you want to convert a passphrase to a key, use a suitable
 	// package like bcrypt or scrypt.
 	// When decoded the key should be 16 bytes (AES-128) or 32 (AES-256).
-	key, _ := hex.DecodeString("6368616e676520746869732070617373776f726420746f206120736563726574")
-	ciphertext, _ := hex.DecodeString("c3aaa29f002ca75870806e44086700f62ce4d43e902b3888e23ceff797a7a471")
-	nonce, _ := hex.DecodeString("64a9433eae7ccceee2fc0eda")
+	key, _ := hex.DecodeString("494414ded24da13c451b13b424928821351c78fce49f93d9e1b55f102790c206")
+	ciphertext, _ := hex.DecodeString("231e3c779de9ff45243d6b7bf102e556ba24d5ee")
+	nonce, _ := hex.DecodeString("71ccc742b37d74bdc3732c9b")
 
 	block, err := aes.NewCipher(key)
 	if err != nil {
@@ -34,4 +34,3 @@ func decrypt() {
 
 	fmt.Printf("%s\n", plaintext)
 }
-
