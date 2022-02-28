@@ -1,5 +1,7 @@
 package main
 
+import "github.com/aws/aws-sdk-go-v2/service/route53/types"
+
 func check(e error) {
 	if e != nil {
 		panic(e)
@@ -8,11 +10,11 @@ func check(e error) {
 
 func main() {
 	//StoreNewPassword()
-	/*awsClient, hash := Login()
+	awsClient, hash := Login()
 	if awsClient == nil {
 		return
 	}
-	ChangeUserRRSet(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")*/
+	PublishUserData(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")
 	decrypt()
-	PublishNewKeyPostalService()
+	PublishNewKeyPostalService(awsClient, "real.dhl")
 }
