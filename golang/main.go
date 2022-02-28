@@ -12,6 +12,7 @@ func main() {
 	if awsClient == nil {
 		return
 	}
-	ChangeRRSet(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")*/
+	ChangeUserRRSet(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")*/
 	decrypt()
+	PublishNewKeyPostalService()
 }
