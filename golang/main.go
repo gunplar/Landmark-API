@@ -1,6 +1,6 @@
 package main
 
-import "github.com/aws/aws-sdk-go-v2/service/route53/types"
+import "fmt"
 
 func check(e error) {
 	if e != nil {
@@ -14,7 +14,10 @@ func main() {
 	if awsClient == nil {
 		return
 	}
-	PublishUserData(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")
-	decrypt()
-	PublishNewKeyPostalService(awsClient, "real.dhl")
+	fmt.Println(hash)
+	//ModifyUserData(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")
+	//decrypt()
+	//PublishNewKeyPostalService(awsClient, "real.dhl")
+	//res, err := net.LookupTXT("real.dhl.cmtrd.aws.in.here.com")
+	PublishEncryptedAESkey(awsClient, "phucmai", "real.dhl", "lololo")
 }

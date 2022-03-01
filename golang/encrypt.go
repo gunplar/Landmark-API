@@ -8,7 +8,7 @@ import (
 	"io"
 )
 
-func encrypt(content string, aesKey string) (string, []byte) {
+func AESencrypt(content string, aesKey string) (string, []byte) {
 	// Load your secret key from a safe place and reuse it across multiple
 	// Seal/Open calls. (Obviously don't use this example key for anything
 	// real.) If you want to convert a passphrase to a key, use a suitable

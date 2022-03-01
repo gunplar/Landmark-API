@@ -22,3 +22,13 @@ func LoadConfiguration(file string) Config {
 	check(err)
 	return config
 }
+
+func SplitLongRoute53String(input string) string {
+	i := 250
+	output := input
+	for i <= len(output) {
+		output = output[:i] + "\"\"" + output[i:]
+		i += 252
+	}
+	return output
+}

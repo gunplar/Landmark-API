@@ -12,7 +12,8 @@ import (
 	"strings"
 )
 
-func PublishNewKeyPostalService(client *route53.Client,
+func PublishNewKeyPostalService(
+	client *route53.Client,
 	subDomain string) {
 
 	//Generate the RSA key pair
@@ -21,8 +22,7 @@ func PublishNewKeyPostalService(client *route53.Client,
 
 	//Write the private key to PEM file
 	var privkeyBytes []byte
-	privkeyBytes, err = x509.MarshalPKCS8PrivateKey(privateKey)
-	check(err)
+	privkeyBytes = x509.MarshalPKCS1PrivateKey(privateKey)
 	privkeyPem := pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "RSA PRIVATE KEY",
@@ -37,8 +37,7 @@ func PublishNewKeyPostalService(client *route53.Client,
 	//Generate PEM format of public key
 	publicKey := privateKey.PublicKey
 	var pubkeyBytes []byte
-	pubkeyBytes, err = x509.MarshalPKIXPublicKey(&publicKey)
-	check(err)
+	pubkeyBytes = x509.MarshalPKCS1PublicKey(&publicKey)
 	pubkeyPem := pem.EncodeToMemory(
 		&pem.Block{
 			Type:  "RSA PUBLIC KEY",
