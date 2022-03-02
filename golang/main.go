@@ -19,5 +19,6 @@ func main() {
 	//decrypt()
 	//PublishNewKeyPostalService(awsClient, "real.dhl")
 	//res, err := net.LookupTXT("real.dhl.cmtrd.aws.in.here.com")
-	PublishEncryptedAESkey(awsClient, "phucmai", "real.dhl", "lololo")
+	//ModifyEncryptedAESkey(awsClient, "phucmai", "real.dhl", hash)
+	RetrieveUserData("real.dhl", "phucmai")
 }
