@@ -1,24 +1,11 @@
+/*
+Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+
+*/
 package main
 
-import "fmt"
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
+import "LandmarkAPI/cmd"
 
 func main() {
-	//StoreNewPassword()
-	awsClient, hash := Login()
-	if awsClient == nil {
-		return
-	}
-	fmt.Println(hash)
-	//ModifyUserData(awsClient, types.ChangeActionUpsert, hash, "phucmai", "test")
-	//decrypt()
-	//PublishNewKeyPostalService(awsClient, "real.dhl")
-	//res, err := net.LookupTXT("real.dhl.cmtrd.aws.in.here.com")
-	//ModifyEncryptedAESkey(awsClient, "phucmai", "real.dhl", hash)
-	RetrieveUserData("real.dhl", "phucmai")
+	cmd.Execute()
 }

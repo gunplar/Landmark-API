@@ -1,4 +1,4 @@
-package main
+package internal
 
 import (
 	"encoding/json"
@@ -8,6 +8,12 @@ import (
 type Config struct {
 	ZoneName string `json:"ZoneName"`
 	ZoneId   string `json:"ZoneId"`
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }
 
 func LoadConfiguration(file string) Config {
