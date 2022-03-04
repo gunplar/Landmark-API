@@ -3,12 +3,9 @@ package internal
 import (
 	"bufio"
 	"bytes"
-	"context"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"os"
 	"path/filepath"
 
@@ -47,10 +44,10 @@ func StoreNewPassword() {
 	fmt.Println("The passwords did not match or was nil.")
 }
 
-func Login() (*route53.Client, string) {
+func Login() {
 	password := PasswordInput("Login password:")
 	hash := sha256.Sum256(password)
-	passwordString := hex.EncodeToString(hash[:])
+	hashString := hex.EncodeToString(hash[:])
 	path, err := os.Getwd()
 	check(err)
 	passDir := filepath.Join(path, "resources", "pass")
@@ -63,17 +60,15 @@ func Login() (*route53.Client, string) {
 	}(f)
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
-		if passwordString == scanner.Text() {
-			fmt.Println("Login success.")
-			cfg, err := config.LoadDefaultConfig(context.Background(),
-				config.WithRegion("aws-global"),
-			)
+		if hashString == scanner.Text() {
+			err = os.Setenv("LANDMARK_ID", hashString)
 			check(err)
-			return route53.NewFromConfig(cfg), passwordString
+			fmt.Println("Login succeeded.")
+			return
 		}
 	}
 	err = scanner.Err()
 	check(err)
 	fmt.Println("Login fail.")
-	return nil, ""
+	return
 }

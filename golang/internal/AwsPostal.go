@@ -7,7 +7,6 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
-	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"github.com/aws/aws-sdk-go-v2/service/route53/types"
 	"net"
 	"os"
@@ -48,7 +47,6 @@ func RetrieveUserData(
 }
 
 func PublishNewKeyPostalService(
-	client *route53.Client,
 	subDomain string) {
 	//Generate the RSA key pair
 	privateKey, err := rsa.GenerateKey(rand.Reader, 4096)
@@ -77,5 +75,5 @@ func PublishNewKeyPostalService(
 		},
 	)
 	//Create new AWS client and publish the key on a DNS RR
-	ChangeRRSet(client, types.ChangeActionUpsert, subDomain, strings.Replace(string(pubkeyPem), "\n", "\"\"", -1))
+	ChangeRRSet(types.ChangeActionUpsert, subDomain, strings.Replace(string(pubkeyPem), "\n", "\"\"", -1))
 }

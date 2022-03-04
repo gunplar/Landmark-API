@@ -1,7 +1,10 @@
 package internal
 
 import (
+	"context"
 	"encoding/json"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"os"
 )
 
@@ -14,6 +17,14 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+func NewAWSClient() *route53.Client {
+	cfg, err := config.LoadDefaultConfig(context.Background(),
+		config.WithRegion("aws-global"),
+	)
+	check(err)
+	return route53.NewFromConfig(cfg)
 }
 
 func LoadConfiguration(file string) Config {

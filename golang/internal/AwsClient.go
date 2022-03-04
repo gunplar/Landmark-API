@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"github.com/aws/aws-sdk-go-v2/service/route53/types"
@@ -18,7 +19,6 @@ import (
 )
 
 func ChangeRRSet(
-	client *route53.Client,
 	operation types.ChangeAction,
 	subDomain string,
 	rrContent string) {
@@ -55,31 +55,39 @@ func ChangeRRSet(
 		},
 		HostedZoneId: aws.String(appConfig.ZoneId),
 	}
-
+	client := NewAWSClient()
 	_, err = client.ChangeResourceRecordSets(context.Background(), &input)
 	check(err)
 }
 
 func ModifyUserData(
-	client *route53.Client,
 	operation types.ChangeAction,
-	aesKey string,
 	subDomain string,
 	rrContent string) {
+
+	aesKey := os.Getenv("LANDMARK_ID")
+	if len(aesKey) < 255 {
+		fmt.Println("Please login to use this command.")
+		return
+	}
 
 	var nonce []byte
 	rrContent, nonce = AESencrypt(rrContent, aesKey)
 	nonceString := hex.EncodeToString(nonce)
 
-	ChangeRRSet(client, operation, subDomain, rrContent)
-	ChangeRRSet(client, operation, "nonce."+subDomain, nonceString)
+	ChangeRRSet(operation, subDomain, rrContent)
+	ChangeRRSet(operation, "nonce."+subDomain, nonceString)
 }
 
-func ModifyEncryptedAESkey(
-	client *route53.Client,
+func PublishEncryptedAESkey(
 	subDomain string,
-	postalDomain string,
-	aesKey string) {
+	postalDomain string) {
+
+	aesKey := os.Getenv("LANDMARK_ID")
+	if len(aesKey) < 255 {
+		fmt.Println("Please login to use this command.")
+		return
+	}
 	//Load configs
 	path, err := os.Getwd()
 	check(err)
@@ -102,18 +110,5 @@ func ModifyEncryptedAESkey(
 	encryptedBytes, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, key, []byte(aesKey), nil)
 	check(err)
 	//Publish the cipher on a DNS RR
-	ChangeRRSet(client, types.ChangeActionUpsert, postalDomain+"."+subDomain, SplitLongRoute53String(hex.EncodeToString(encryptedBytes)))
-	/*
-		keyDir := filepath.Join(path, "resources", "privatekey.pem")
-		var privateKeyByte []byte
-		privateKeyByte, err = os.ReadFile(keyDir)
-		block, rest = pem.Decode(privateKeyByte)
-		privkey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-		check(err)
-		err = privkey.Validate()
-		check(err)
-		decrypted, err := privkey.Decrypt(nil, encryptedBytes, &rsa.OAEPOptions{Hash: crypto.SHA256})
-		check(err)
-		fmt.Println("decrypted message: ", string(decrypted))*/
-
+	ChangeRRSet(types.ChangeActionUpsert, postalDomain+"."+subDomain, SplitLongRoute53String(hex.EncodeToString(encryptedBytes)))
 }
