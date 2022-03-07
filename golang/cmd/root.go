@@ -1,5 +1,5 @@
 /*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
+Copyright © 2022 PHUC MAI <phuc.mai@here.com>
 
 */
 package cmd
@@ -12,10 +12,10 @@ import (
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "LandmarkAPI",
-	Short: "Storing and sharing data through DNS",
-	Long: `A CLI tool to share sophisticated data like geoJSONs through DNS TXT resource records 
-and cryptography.`,
+	Use:   "landmark",
+	Short: "Storing and sharing data through DNS entries.",
+	Long: `A CLI tool to share sophisticated data like geoJSONs 
+using DNS TXT resource records and cryptography.`,
 	// Uncomment the following line if your bare application
 	// has an action associated with it:
 	// Run: func(cmd *cobra.Command, args []string) { },
@@ -39,5 +39,11 @@ func init() {
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	//rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+}
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

@@ -1,4 +1,4 @@
-module LandmarkAPI
+module landmark
 
 go 1.17
 
@@ -7,7 +7,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.13.1
 	github.com/aws/aws-sdk-go-v2/service/route53 v1.17.0
 	github.com/spf13/cobra v1.3.0
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
 )
 
 require (
@@ -23,7 +22,4 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/sys v0.0.0-20220227234510-4e6760a101f9 // indirect
 )
-
-replace LandmarkAPI/main => ../main

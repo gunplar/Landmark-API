@@ -8,7 +8,6 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
-	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"github.com/aws/aws-sdk-go-v2/service/route53/types"
@@ -60,16 +59,23 @@ func ChangeRRSet(
 	check(err)
 }
 
+func GetAesKey() string {
+	path, err := os.Getwd()
+	check(err)
+	passDir := filepath.Join(path, "resources", "pass")
+	awsKey, err := os.ReadFile(passDir)
+	check(err)
+	hash := sha256.Sum256(awsKey)
+	return hex.EncodeToString(hash[:])
+}
+
 func ModifyUserData(
 	operation types.ChangeAction,
 	subDomain string,
 	rrContent string) {
 
-	aesKey := os.Getenv("LANDMARK_ID")
-	if len(aesKey) < 255 {
-		fmt.Println("Please login to use this command.")
-		return
-	}
+	//Compute AES key from AWS credential
+	aesKey := GetAesKey()
 
 	var nonce []byte
 	rrContent, nonce = AESencrypt(rrContent, aesKey)
@@ -83,16 +89,13 @@ func PublishEncryptedAESkey(
 	subDomain string,
 	postalDomain string) {
 
-	aesKey := os.Getenv("LANDMARK_ID")
-	if len(aesKey) < 255 {
-		fmt.Println("Please login to use this command.")
-		return
-	}
 	//Load configs
 	path, err := os.Getwd()
 	check(err)
 	configDir := filepath.Join(path, "resources", "appConfig.json")
 	appConfig := LoadConfiguration(configDir)
+	//Compute AES key from AWS credential
+	aesKey := GetAesKey()
 	//DNS query the public key from postal service
 	var res []string
 	res, err = net.LookupTXT(postalDomain + "." + appConfig.ZoneName)

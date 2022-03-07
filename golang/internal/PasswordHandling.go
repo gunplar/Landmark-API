@@ -1,15 +1,15 @@
 package internal
 
+/*
 import (
 	"bufio"
 	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"golang.org/x/term"
 	"os"
 	"path/filepath"
-
-	"golang.org/x/term"
 )
 
 func PasswordInput(mess string) []byte {
@@ -70,5 +70,4 @@ func Login() {
 	err = scanner.Err()
 	check(err)
 	fmt.Println("Login fail.")
-	return
-}
+} */
