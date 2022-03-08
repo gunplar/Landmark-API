@@ -5,36 +5,30 @@ Copyright © 2022 PHUC MAI <phuc.mai@here.com>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"landmark/internal"
 )
+
+var postalKeyDomain string
 
 // publishPostalKeyCmd represents the publishPostalKey command
 var publishPostalKeyCmd = &cobra.Command{
-	Use:   "publishPostalKey",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "publish-key",
+	Short: "Publish the postal company's public key",
+	Long: `Publish the postal company's public key.
+The key pair will be automatically generated, the private key will be saved in a file.
+End users will use this public key to encrypt and share the symmetric key on a DNS entry. 
+The symmetric key is needed to decrypt the user's landmark location data.'`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("publishPostalKey called")
+		internal.PublishNewKeyPostalService(postalKeyDomain)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(publishPostalKeyCmd)
+	postalCmd.AddCommand(publishPostalKeyCmd)
+	publishPostalKeyCmd.Flags().StringVar(&postalKeyDomain, "domain", "",
+		"The subdomain to publish the public key")
+	err := publishPostalKeyCmd.MarkFlagRequired("domain")
+	check(err)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// publishPostalKeyCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// publishPostalKeyCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

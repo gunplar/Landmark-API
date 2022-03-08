@@ -15,7 +15,7 @@ var rrContent string
 
 // publishUserDataCmd represents the publishUserData command
 var publishUserDataCmd = &cobra.Command{
-	Use:   "publish", //TODO
+	Use:   "publish-stored",
 	Short: "Publish the encrypted data on a DNS domain.",
 	Long: `Publish the encrypted data on a DNS domain. 
 The nonce used in the AES encryption is also published in a subdomain 
@@ -35,13 +35,5 @@ func init() {
 		"The content to be encrypted and published")
 	err = publishUserDataCmd.MarkFlagRequired("content")
 	check(err)
-	// Here you will define your flags and configuration settings.
 
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// publishUserDataCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// publishUserDataCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
