@@ -40,11 +40,18 @@ echo "pseudo-password-instead-of-your-aws-one" > Landmark-API/golang/resources/p
 
 
 ### Setup
+Go to the repo directory and install dependencies for this
+project: 
+```
+cd Landmark-API
+go mod tidy
+```
+
 Go to the golang directory and 
 install the landmark CLI:
 
 ```
-cd Landmark-API/golang
+cd golang
 go install
 ```
 
