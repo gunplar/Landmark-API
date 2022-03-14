@@ -38,6 +38,8 @@ func ChangeRRSet(
 		rrContent = res[0]
 	}
 
+	rrContent = SplitLongRoute53String(rrContent)
+
 	input := route53.ChangeResourceRecordSetsInput{
 		ChangeBatch: &types.ChangeBatch{
 			Changes: []types.Change{
