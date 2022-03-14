@@ -115,3 +115,6 @@ all in one single command:
 ```
 landmark postal show-user-data --postal-domain real.dhl --user-domain usera
 ```
+
+The delete commands may panic with errors due to DNS entries not found,
+because of system local DNS cache.
