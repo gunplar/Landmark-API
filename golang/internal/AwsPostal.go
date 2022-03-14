@@ -75,5 +75,6 @@ func PublishNewKeyPostalService(
 		},
 	)
 	//Create new AWS client and publish the key on a DNS RR
-	ChangeRRSet(types.ChangeActionUpsert, subDomain, strings.Replace(string(pubkeyPem), "\n", "\"\"", -1))
+	pubkeyPemString := strings.Replace(string(pubkeyPem), "\n", "", -1)
+	ChangeRRSet(types.ChangeActionUpsert, subDomain, pubkeyPemString)
 }
