@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/hex"
 	"encoding/pem"
+	"fmt"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/route53"
 	"github.com/aws/aws-sdk-go-v2/service/route53/types"
@@ -29,6 +30,10 @@ func ChangeRRSet(
 
 	if operation == types.ChangeActionDelete {
 		res, err := net.LookupTXT(subDomain + "." + appConfig.ZoneName)
+		if len(res) == 0 {
+			fmt.Println(subDomain + "." + appConfig.ZoneName + " does not exist.")
+			return
+		}
 		check(err)
 		rrContent = res[0]
 	}
